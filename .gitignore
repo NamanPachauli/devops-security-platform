@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # If you prefer the allow list template instead of the deny list, see community template:
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
@@ -30,3 +31,19 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+=======
+node_modules
+.env
+*.log
+*.tmp
+.DS_Store
+
+# docker
+*.tar
+
+# kubernetes
+*.cache
+
+# vscode
+.vscode
+>>>>>>> 4c72696 (Initial DevOps Security Platform setup (Go + MongoDB + Docker + Kubernetes + Prometheus + Grafana))
