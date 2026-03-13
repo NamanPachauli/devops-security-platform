@@ -3,21 +3,27 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
+        stage('Checkout Code') {
             steps {
-                git 'https://github.com/YOUR_GITHUB_USERNAME/devops-security-platform.git'
+                git 'https://github.com/NamanPachauli/devops-security-platform.git'
             }
         }
 
         stage('Build Go App') {
             steps {
-                bat 'go build -o auth-service.exe'
+                bat 'go build -o auth-service.exe ./auth-service'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 bat 'docker build -t devops-auth-service .'
+            }
+        }
+
+        stage('Remove Old Container') {
+            steps {
+                bat 'docker rm -f auth-container || exit 0'
             }
         }
 
