@@ -3,12 +3,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/NamanPachauli/devops-security-platform.git'
-            }
-        }
-
         stage('Build Go App') {
             steps {
                 bat 'go build -o auth-service.exe ./auth-service'
