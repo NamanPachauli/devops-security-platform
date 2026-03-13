@@ -1,17 +1,21 @@
 pipeline {
-    agent any
+    agent {
+        docker { 
+            image 'golang:1.21'  // Official Go image
+            args '-v /var/run/docker.sock:/var/run/docker.sock' // To run Docker inside container
+        }
+    }
 
     environment {
         APP_NAME = "devops-security-platform"
         IMAGE_NAME = "devops-security-platform-image"
         CONTAINER_NAME = "devops-security-platform-container"
-        PORT = "9090"   // Change if needed
+        PORT = "9090"
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                // Checkout your GitHub repo
                 git branch: 'main', url: 'https://github.com/NamanPachauli/devops-security-platform.git'
             }
         }
@@ -52,10 +56,10 @@ pipeline {
 
     post {
         success {
-            echo "Pipeline completed successfully! "
+            echo "Pipeline completed successfully! ✅"
         }
         failure {
-            echo "Pipeline failed. "
+            echo "Pipeline failed. ❌"
         }
     }
 }
