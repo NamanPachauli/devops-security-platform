@@ -1,31 +1,61 @@
 pipeline {
     agent any
 
+    environment {
+        APP_NAME = "devops-security-platform"
+        IMAGE_NAME = "devops-security-platform-image"
+        CONTAINER_NAME = "devops-security-platform-container"
+        PORT = "9090"   // Change if needed
+    }
+
     stages {
+        stage('Checkout Code') {
+            steps {
+                // Checkout your GitHub repo
+                git branch: 'main', url: 'https://github.com/NamanPachauli/devops-security-platform.git'
+            }
+        }
 
         stage('Build Go App') {
             steps {
-                bat 'go build -o auth-service.exe ./auth-service'
+                echo "Building Go application..."
+                sh 'go mod tidy'
+                sh 'go build -o $APP_NAME ./...'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t devops-auth-service .'
+                echo "Building Docker image..."
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
         stage('Remove Old Container') {
             steps {
-                bat 'docker rm -f auth-container || exit 0'
+                echo "Removing old container if exists..."
+                sh '''
+                if [ $(docker ps -a -q -f name=$CONTAINER_NAME) ]; then
+                    docker rm -f $CONTAINER_NAME
+                fi
+                '''
             }
         }
 
         stage('Run Container') {
             steps {
-                bat 'docker run -d -p 9095:9092 --name auth-container devops-auth-service'
+                echo "Running Docker container..."
+                sh 'docker run -d -p $PORT:$PORT --name $CONTAINER_NAME $IMAGE_NAME'
             }
         }
+    }
 
+    post {
+        success {
+            echo "Pipeline completed successfully! "
+        }
+        failure {
+            echo "Pipeline failed. "
+        }
     }
 }
