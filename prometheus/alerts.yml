@@ -1,0 +1,31 @@
+groups:
+
+* name: microservice-alerts
+  rules:
+
+  * alert: AuthServiceDown
+    expr: up{job="auth-service"} == 0
+    for: 10s
+    labels:
+    severity: critical
+    annotations:
+    summary: "Auth Service is Down"
+    description: "Auth service container is not responding."
+
+  * alert: AuditServiceDown
+    expr: up{job="audit-service"} == 0
+    for: 10s
+    labels:
+    severity: critical
+    annotations:
+    summary: "Audit Service is Down"
+    description: "Audit service container is not responding."
+
+  * alert: HighCPUUsage
+    expr: rate(node_cpu_seconds_total[1m]) > 0.8
+    for: 1m
+    labels:
+    severity: warning
+    annotations:
+    summary: "High CPU usage detected"
+    description: "CPU usage is above 80%"
