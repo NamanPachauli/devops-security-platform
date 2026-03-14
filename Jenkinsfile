@@ -2,14 +2,17 @@ pipeline {
     agent any
 
     stages {
+
         stage('Build') {
             steps {
-                script {
-                    docker.image('golang:1.21').inside("-v /c/ProgramData/Jenkins/.jenkins/workspace/devops-security-platform:/workspace") {
-                        bat 'go build'
-                    }
-                }
+
+                bat '''
+                docker run --rm -v C:/ProgramData/Jenkins/.jenkins/workspace/devops-security-platform:/workspace -w /workspace golang:1.25 go version
+                docker run --rm -v C:/ProgramData/Jenkins/.jenkins/workspace/devops-security-platform:/workspace -w /workspace golang:1.25 go build -o app.exe
+                '''
+
             }
         }
+
     }
 }
